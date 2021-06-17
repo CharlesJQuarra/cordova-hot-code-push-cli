@@ -1,12 +1,9 @@
-import es6promise from 'es6-promise';
+let path = require('path');
+let prompt = require('prompt');
+let _ = require('lodash');
+let fs = require('fs');
+let Utils = require('./utils.js');
 
-es6promise.polyfill();
-
-import path from 'path';
-import prompt from 'prompt';
-import _ from 'lodash';
-
-import { getInput, writeFile } from './utils';
 
 const configFile = path.join(process.cwd(), 'cordova-hcp.json');
 
@@ -76,22 +73,48 @@ const urlSchema = {
   },
 };
 
-export function execute(context) {
-  prompt.override = context.argv;
-  prompt.message = 'Please provide';
-  prompt.delimiter = ': ';
-  prompt.start();
+const utilDefaults = Utils();
 
-  let result;
-
-  getInput(prompt, schema)
-    .then(validateBucket)
-    .then(res => result = res)
-    .then(getUrl)
-    .then(url => _.assign(result, url))
-    .then(content => writeFile(configFile, content))
-    .then(done);
+const DependsCls = function(objArgs) {
+  objArgs = (!objArgs) ? {} : objArgs;
+  let { prompt = prompt } = objArgs;
+  this.prompt = prompt;
+  this.utils = Utils(objArgs);
 }
+
+const Depends = function(objArgs) {
+  return new DependsCls(objArgs);
+}
+
+function Init(deps = Depends()) {
+  this.deps = deps;
+  let prompt = deps.prompt;
+  let getInput = deps.utils.getInput;
+  let writeToFile = deps.utils.writeToFile;
+
+  this.execute = function(context) {
+    prompt.override = context.argv;
+    prompt.message = 'Please provide';
+    prompt.delimiter = ': ';
+    prompt.start();
+
+    let result;
+    return getInput(prompt, schema)
+      .then(validateBucket)
+      .then(res => result = res)
+      .then(getUrl)
+      .then(url => _.assign(result, url))
+      .then(content => {
+        writeToFile(configFile, content);
+      })
+      .then(done);
+  }
+};
+Init.Depends = Depends;
+module.exports = function(objArgs) {
+  return new Init(Depends(objArgs));
+};
+
 
 function validateBucket(result) {
   if (!result.s3bucket) {

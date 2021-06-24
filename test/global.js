@@ -1,12 +1,16 @@
+/*
 global.sinon = require('sinon');
 global.chai = require("chai");
 global.expect = require("chai").expect;
 var sinonChai = require("sinon-chai");
-var es6promise = require('es6-promise');
-es6promise.polyfill();
+//import Promise from 'core-js-pure/features/promise';
+//var es6promise = require('es6-promise');
+//es6promise.polyfill();
+import 'core-js/features/promise/index.js';
 
-var Promise = es6promise.Promise;
+//var Promise = es6promise.Promise;
 var originalPromise = Promise;
+console.log(`Promise: ${Promise}`);
 Promise._setScheduler((flush) => flush());
 
 function MockPromise(func) {
@@ -55,8 +59,9 @@ global.MockPromise = MockPromise;
 
 chai.use(sinonChai);
 
-var Promise = require('es6-promise').Promise;
+//var Promise = require('es6-promise').Promise;
 
 // I'm not sure why _setScheduler always works so we don't have to use the MockPromise in order to make the test run synch.
 Promise._setScheduler((flush) => flush());
 global.Promise = Promise;
+*/

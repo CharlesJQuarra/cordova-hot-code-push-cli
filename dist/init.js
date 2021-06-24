@@ -7,9 +7,9 @@ exports.execute = execute;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _es6Promise = require('es6-promise');
+//var _es6Promise = require('es6-promise');
 
-var _es6Promise2 = _interopRequireDefault(_es6Promise);
+//var _es6Promise2 = _interopRequireDefault(_es6Promise);
 
 var _path = require('path');
 
@@ -25,7 +25,7 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _utils = require('./utils');
 
-_es6Promise2['default'].polyfill();
+//_es6Promise2['default'].polyfill();
 
 var configFile = _path2['default'].join(process.cwd(), 'cordova-hcp.json');
 

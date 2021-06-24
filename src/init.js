@@ -73,9 +73,7 @@ const urlSchema = {
   },
 };
 
-const utilDefaults = Utils();
-
-const DependsCls = function(objArgs) {
+const OverrideableDepsCls = function(objArgs) {
   objArgs = (!objArgs) ? {} : objArgs;
   let { prompt = prompt } = objArgs;
   this.prompt = prompt;
@@ -83,7 +81,7 @@ const DependsCls = function(objArgs) {
 }
 
 const Depends = function(objArgs) {
-  return new DependsCls(objArgs);
+  return new OverrideableDepsCls(objArgs);
 }
 
 function Init(deps = Depends()) {

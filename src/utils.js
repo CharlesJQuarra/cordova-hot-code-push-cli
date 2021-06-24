@@ -16,7 +16,7 @@ class FunctionWithDeps extends Function {
 };
 
 
-const DependsCls = function(objArgs) {
+const OverrideableDepsCls = function(objArgs) {
   objArgs = (!objArgs) ? {} : objArgs;
   let { writeFile = fs.writeFile, prompt = prompt } = objArgs;
   this.writeFile = writeFile;
@@ -24,7 +24,7 @@ const DependsCls = function(objArgs) {
 };
 
 const Depends = function(objArgs) {
-  return new DependsCls(objArgs);
+  return new OverrideableDepsCls(objArgs);
 }
 
 function Utils(deps = Depends()) {

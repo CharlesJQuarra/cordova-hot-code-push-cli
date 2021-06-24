@@ -41,6 +41,7 @@
       return DEFAULT_WWW_FOLDER;
     }
 
+    console.log(`process.cwd() == ${process.cwd()}`);
     return path.join(process.cwd(), consoleArgs[1]);
   }
 

@@ -69,7 +69,6 @@ function Build(deps = Depends()) {
     var queue = [];
     for (var i in files) {
       var file = files[i];
-      console.log(`prepareFilesHashQueue: file = ${file}`);
       if (!deps.hidefile.isHiddenSync(file)) {
         queue.push(this.hashFile.bind(null, file));
       }

@@ -17,6 +17,10 @@
       '.gitkeep',
       '.git',
       'package.json'];
+  //unused, think how to do this. Related: https://github.com/yargs/yargs-parser/issues/92
+  var consoleToCamelProps = {
+    'source-dir': "sourceDirectory"
+  }
 
   module.exports = {
     context : context
@@ -35,14 +39,16 @@
     this.ignoredFiles = getIgnoredFiles();
   };
 
+  var SOURCE_DIR_PROP = 'sourceDir';
   function getSourceDirectory(argv) {
     var consoleArgs = argv._;
-    if (!consoleArgs || consoleArgs.length !== 2) {
+    let sourceDirFromPositional = consoleArgs.length >= 2 ? consoleArgs[1] : null;
+    let sourceDir = SOURCE_DIR_PROP in argv ? argv[SOURCE_DIR_PROP] : sourceDirFromPositional;
+    if (sourceDir == null) {
       return DEFAULT_WWW_FOLDER;
     }
 
-    console.log(`process.cwd() == ${process.cwd()}`);
-    return path.join(process.cwd(), consoleArgs[1]);
+    return path.join(process.cwd(), sourceDir);
   }
 
   function getIgnoredFiles() {

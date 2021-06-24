@@ -25,7 +25,7 @@ describe('build', () => {
       writeFile.callsFake((filename, data, cb) => cb());
       buildInstance = Build({ fs: fs });
 
-      let contextArgs = { _: ['build', BUILD_TEST_FOLDER]}
+      let contextArgs = { _: ['build', BUILD_TEST_FOLDER] ,"generateConfigIfMissing": true}
       let context = chcpContext.context(contextArgs);
       buildPromise = buildInstance.execute(context);
     });
@@ -50,10 +50,28 @@ describe('build', () => {
         "file": "index.js",
         "hash": "09e5213333f0f2aa0b453eafafd76276"
       }])), sinon.match.func);
-      //console.log(`writeFile.secondCall: ${writeFile.secondCall.args}`);
       sinon.assert.calledWith(writeFile.secondCall, sinon.match((val)=> val.match(/chcp\.json$/)), sinon.match.any, sinon.match.func);
     }));
 
   });
+
+  describe('for defaultConfig', () => {
+    describe('if config is not found and generateConfigIfMissing is not set', () => {
+      beforeEach(() => {
+        writeFile = sandbox.stub(fs, 'writeFile');
+        writeFile.callsFake((filename, data, cb) => cb());
+        buildInstance = Build({ fs: fs });
+        let contextArgs = { _: ['build'] }
+        let context = chcpContext.context(contextArgs);
+        buildPromise = buildInstance.execute(context);
+      });
+
+      it('build step should fail', () => buildPromise.then(() => {
+        sinon.assert.fail('If we see this line, it means the build step proceeded despite the failure expectation');
+      }).catch((error) => {
+        sinon.assert.match(error, sinon.match({ error: sinon.match(/no configuration file found/)}));
+      }));
+    })
+  })
 
 });

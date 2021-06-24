@@ -21,7 +21,7 @@ describe('context', () => {
   describe('when command line arguments are NOT set', () => {
     describe('for defaults', () => {
       beforeEach(() => {
-        contextArgs = { _: ['build']}
+        contextArgs = { _: ['build'], "generateConfigIfMissing": true}
         context = chcpContext.context(contextArgs);
       });
 
@@ -48,6 +48,17 @@ describe('context', () => {
         it('should parse keyword argument sourceDir as sourceDirectory', () => sinon.assert.match(context.sourceDirectory, BUILD_TEST_FOLDER));
       });
     });
+
+    describe('for defaultConfig', () => {
+      describe('abort if config is not found and generateConfigIfMissing is not set', () => {
+        beforeEach(() => {
+          contextArgs = { _: ['build'] }
+          context = chcpContext.context(contextArgs);
+        });
+
+        it('property should exist in config', () => sinon.assert.match(context.generateConfigIfMissing, false));
+      })
+    })
   });
 
 });

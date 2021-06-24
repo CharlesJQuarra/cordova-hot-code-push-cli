@@ -33,6 +33,7 @@
   var Context = function(argv) {
     this.argv = argv ? argv : {};
     this.defaultConfig = DEFAULT_CLI_CONFIG;
+    this.generateConfigIfMissing = 'generateConfigIfMissing' in argv ? true : false;
     this.sourceDirectory = getSourceDirectory(argv);
     this.manifestFilePath = path.join(this.sourceDirectory, 'chcp.manifest');
     this.projectsConfigFilePath = path.join(this.sourceDirectory, 'chcp.json');
